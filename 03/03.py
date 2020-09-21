@@ -75,8 +75,11 @@ plt.plot(loss_train)
 plt.show()
 
 ### Print out the final loss value at convergence of the gradient descent ###
+print('loss at convergence = ', loss_train[-1])
 
 ### Print out the final model parameter values at convergence of the gradient descent ###
+for i in range(10):
+    print('model parameter: w_{0} = {1}'.format(i,weights[-1][i]))
 
 ### Plot the prediction function in 3D cartesian coordinate system ###
 
