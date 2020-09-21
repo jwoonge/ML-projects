@@ -30,13 +30,16 @@ def f_pred(X, w):
 
 w = np.zeros((10,1))
 degrees = np.zeros((10,2))
-X = calX(data_noisy, degrees)
-print(X)
-print(X.shape)
-z_pred = f_pred(X, w)
-print(z_pred)
-print(z_pred.shape)
 
+X = calX(data_noisy, degrees)
+z_pred = f_pred(X, w)
+
+def loss(v_pred, v_origin):
+    return np.average(np.square(v_pred-v_origin))
+
+label = data_noisy[:,-1].reshape((n,1))
+print(loss(z_pred, label))
+'''
 ### Plot the clean data in 3D cartesian coordinate system ###
 fig = plt.figure()
 ax = fig.gca(projection='3d')
@@ -59,3 +62,4 @@ plt.show()
 
 ### Plot the prediction functions superimposed on the training data ###
 
+'''
