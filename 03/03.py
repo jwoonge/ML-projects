@@ -14,7 +14,7 @@ n = data_clean.shape[0]
 global nd ; nd = 10
 
 def calX(xs, degrees):
-    X = np.ones([n, nd])
+    X = np.ones([xs.shape[0], nd])
     for i in range(nd):
         X[:,i] = f(xs, degrees[i])
     return X
@@ -61,13 +61,15 @@ w, loss_train, weights = grad_desc(X, label, w_init, tau, max_iter)
 ### Plot the clean data in 3D cartesian coordinate system ###
 fig = plt.figure()
 ax = fig.gca(projection='3d')
-ax.scatter(data_clean[:,0], data_clean[:,1], data_clean[:,2])
+ax.scatter(data_clean[:,0], data_clean[:,1], data_clean[:,2], s=1)
+ax.set_zlim(-1,1)
 plt.show()
 
 ### Plot the noisy data in 3D cartesian coordinate system ###
 fig = plt.figure()
 ax = fig.gca(projection='3d')
-ax.scatter(data_noisy[:,0], data_noisy[:,1], data_noisy[:,2], color='r')
+ax.scatter(data_noisy[:,0], data_noisy[:,1], data_noisy[:,2], color='r', s=1)
+#ax.set_zlim(-1,1)
 plt.show()
 
 ### Plot the loss curve in the course of gradient descent ###
@@ -82,6 +84,27 @@ for i in range(10):
     print('model parameter: w_{0} = {1}'.format(i,weights[-1][i]))
 
 ### Plot the prediction function in 3D cartesian coordinate system ###
+x_coordinate = np.linspace(-1,1,60)
+y_coordinate = np.linspace(-1,1,60)
+x_pred, y_pred = np.meshgrid(x_coordinate, y_coordinate, indexing='xy')
+z_pred = Z = np.zeros((x_coordinate.size, y_coordinate.size))
+for (i,j),v in np.ndenumerate(z_pred):
+    if i==len(x_coordinate) or j==len(y_coordinate):
+        break
+    tmp = np.array([x_coordinate[i],y_coordinate[j]]).reshape((1,2))
+    tX = calX(tmp, degrees)
+    z_pred[j,i] = f_pred(tX, weights[-1])[0][0]
+fig = plt.figure(figsize=(15,10))
+ax = fig.add_subplot(1,1,1, projection='3d')
+ax.plot_surface(x_pred, y_pred, z_pred,rstride=1, cstride=1, alpha=0.6, cmap=plt.cm.jet)
+ax.set_zlim(-1,1)
+plt.show()
+
 
 ### Plot the prediction functions superimposed on the training data ###
-
+fig = plt.figure(figsize=(15,10))
+ax = fig.add_subplot(1,1,1, projection='3d')
+ax.plot_surface(x_pred, y_pred, z_pred,rstride=1, cstride=1, alpha=0.6, cmap=plt.cm.jet)
+ax.scatter(data_noisy[:,0], data_noisy[:,1], data_noisy[:,2], color='r', s=1)
+ax.set_zlim(-1,1)
+plt.show()
