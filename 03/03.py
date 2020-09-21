@@ -44,6 +44,10 @@ ax.scatter(data_clean[:,0], data_clean[:,1], data_clean[:,2])
 plt.show()
 
 ### Plot the noisy data in 3D cartesian coordinate system ###
+fig = plt.figure()
+ax = fig.gca(projection='3d')
+ax.scatter(data_noisy[:,0], data_noisy[:,1], data_noisy[:,2], color='r')
+plt.show()
 
 ### Plot the loss curve in the course of gradient descent ###
 
