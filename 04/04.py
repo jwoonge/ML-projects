@@ -20,22 +20,30 @@ X2 = data[data[:,2]==0]
 
 label = data[:,2].reshape([n,1])
 X = np.insert(data,0,1,axis=1)[:,:3]
-print(X.shape)
 w = np.array([[0,0,0]])
 
-print(f_pred(X, w).shape)
-
 # 4. Define the classification loss function
-def mse_loss(label, h_arr):
-    return np.average(np.square(h_arr - label))
+def mse_loss(y, y_pred):
+    return np.average(np.square(y - y_pred))
 
-def ce_loss(label, h_arr):
-    return np.average(-label*np.log(h_arr + np.exp(-64)) - (1-label)*np.log(1-h_arr + np.exp(-64)))
+def ce_loss(y, y_pred):
+    return np.average(-y*np.log(y_pred + np.exp(-64)) - (1-y)*np.log(1-y_pred + np.exp(-64)))
 
 y_pred= f_pred(X, w)
 print(mse_loss(label, y_pred))
 print(ce_loss(label, y_pred))
 
+# 5. Define the gradient of the classification loss function
+def grad_mse_loss(y, y_pred):
+    print(y_pred.shape)
+    print((y_pred-y).shape)
+    return 2/n * np.dot(X.T, (y_pred-y * (y_pred * (1-y_pred))))
+
+def grad_ce_loss(y, y_pred):
+    return 2/n * np.dot(X.T, (y_pred - y))
+
+print(grad_mse_loss(label, y_pred))
+print(grad_ce_loss(label, y_pred))
 
 
 
