@@ -77,7 +77,23 @@ print(w_sklearn)
 print(w_mse)
 print(w_ce)
 
-
+# compute values p(x) for multiple data points x
+def decision_boundary(X, w):
+    x1_min, x1_max = X[:,1].min(), X[:,1].max() # min and max of grade 1
+    x2_min, x2_max = X[:,2].min(), X[:,2].max() # min and max of grade 2
+    xx1, xx2 = np.meshgrid(np.linspace(x1_min, x1_max), np.linspace(x2_min, x2_max)) # create meshgrid
+    X2 = np.ones([np.prod(xx1.shape),3]) 
+    X2[:,1] = xx1.reshape(-1)
+    X2[:,2] = xx2.reshape(-1)
+    p = f_pred(X2,w)
+    p = p.reshape([xx1.shape[0],xx2.shape[0]])
+    idx_admit = (data[:,2]==1)
+    idx_rejec = (data[:,2]==0)
+    plt.scatter(data[idx_admit,0],data[idx_admit,1], marker='+',c='r')
+    plt.scatter(data[idx_rejec,0],data[idx_rejec,1], c='b', s=5)
+    plt.contour(xx1, xx2, p, levels=[0,0.5,1])
+    plt.show()
+decision_boundary(X, w_sklearn)
     
 ###############
 ### Results ###
