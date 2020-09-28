@@ -13,14 +13,15 @@ def sigmoid(z):
 
 # 3. Define the prediction function for the classification
 def f_pred(X, w):
-    return sigmoid(np.dot(X, w.T))
+    return sigmoid(np.dot(X, w))
 
-X = data[(data[:,2]==1)]
-X2 = data[data[:,2]==0]
+#X = data[(data[:,2]==1)]
+#X2 = data[data[:,2]==0]
 
+print(data.shape)
 label = data[:,2].reshape([n,1])
-X = np.insert(data,0,1,axis=1)[:,:3]
-w = np.array([[0,0,0]])
+X = np.insert(data[:,:2],0,1,axis=1)
+w = np.array([[0],[0],[0]])
 
 # 4. Define the classification loss function
 def mse_loss(y, y_pred):
@@ -35,22 +36,52 @@ print(ce_loss(label, y_pred))
 
 # 5. Define the gradient of the classification loss function
 def grad_mse_loss(y, y_pred):
-    print(y_pred.shape)
-    print((y_pred-y).shape)
-    return 2/n * np.dot(X.T, (y_pred-y * (y_pred * (1-y_pred))))
+    return 2/n * np.dot(X.T, (y_pred - y * (y_pred * (1-y_pred))))
+    #return 2/n * np.dot(X.T, (y_pred - y))
 
 def grad_ce_loss(y, y_pred):
     return 2/n * np.dot(X.T, (y_pred - y))
 
-print(grad_mse_loss(label, y_pred))
-print(grad_ce_loss(label, y_pred))
+# 6. Implement the gradient decent algorithm
+import copy
+def grad_desc(X, y, w_init, tau, max_iter):
+    w_mse = copy.deepcopy(w_init); #ws_mse = [w_mse]
+    w_ce = copy.deepcopy(w_init); #ws_ce = [w_ce] 
+    y_pred_mse = f_pred(X, w_mse); y_pred_ce = f_pred(X, w_ce)
+    loss_mse = [mse_loss(y, y_pred_mse)]; loss_ce = [ce_loss(y, y_pred_ce)]
+    for i in range(max_iter):
+        grad_mse = grad_mse_loss(y, y_pred_mse); grad_ce = grad_ce_loss(y, y_pred_ce)
+        w_mse = w_mse - tau*grad_mse
+        w_ce = w_ce - tau*grad_ce
+        
+        y_pred_mse = f_pred(X, w_mse); y_pred_ce = f_pred(X, w_ce)
+        loss_mse.append(mse_loss(y, y_pred_mse))
+        loss_ce.append(ce_loss(y, y_pred_ce))
+    return w_mse, loss_mse, w_ce, loss_ce
+
+label = data[:,2].reshape([n,1])
+X = np.insert(data,0,1,axis=1)[:,:3]
+w_init = np.array([[0],[0],[0]])
+tau = 1e-4; max_iter = 500
+
+w_mse, loss_mse, w_ce, loss_ce = grad_desc(X, label, w_init, tau, max_iter)
+plt.plot(loss_mse)
+plt.show()
+plt.plot(loss_ce)
+plt.show()
+# Scikit-learn logistic regession
+logreg_sklearn = LogisticRegression()
+logreg_sklearn.fit(data[:,:2], label)
+w_sklearn = np.array([logreg_sklearn.intercept_[0], logreg_sklearn.coef_[0][0], logreg_sklearn.coef_[0][1]]).reshape([3,1])
+print(w_sklearn)
+print(w_mse)
+print(w_ce)
 
 
-
-
-################
-###  Results ###
-################
+    
+###############
+### Results ###
+###############
 '''
 # 1. Plot the dataset in 2D cartessian coordinate system
 idx_admit = (data[:,2]==1)
