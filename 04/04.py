@@ -28,7 +28,7 @@ def sigmoid(z):
 ###  Results ###
 ################
 
-# Plot the dataset in 2D cartessian coordinate system
+# 1. Plot the dataset in 2D cartessian coordinate system
 idx_admit = (data[:,2]==1)
 idx_rejec = (data[:,2]==0)
 plt.scatter(data[idx_admit,0],data[idx_admit,1], marker='+',c='r')
@@ -37,4 +37,11 @@ plt.legend(['Admitted','Rejected'])
 plt.xlabel('Exam grade 1')
 plt.ylabel('Exam grade 2')
 plt.title('Training data')
+plt.show()
+
+# 2. Plot 
+x_values = np.linspace(-10, 10)
+plt.plot(x_values, sigmoid(x_values))
+plt.title('Sigmoid Function')
+plt.grid(True)
 plt.show()
