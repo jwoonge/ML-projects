@@ -11,9 +11,19 @@ global n; n = data.shape[0]
 def sigmoid(z):
     return 1/(1+np.exp(-z))
 
+# 3. Define the prediction function for the classification
+def f_pred(X, w):
+    return sigmoid(np.dot(X, w.T))
 
+X = data[(data[:,2]==1)]
+X2 = data[data[:,2]==0]
 
+label = data[:,2]
+X = np.insert(data,0,1,axis=1)[:,:3]
+print(X.shape)
+w = np.array([[0.1,0.2,0.3]])
 
+print(f_pred(X, w).shape)
 
 
 
@@ -27,7 +37,7 @@ def sigmoid(z):
 ################
 ###  Results ###
 ################
-
+'''
 # 1. Plot the dataset in 2D cartessian coordinate system
 idx_admit = (data[:,2]==1)
 idx_rejec = (data[:,2]==0)
@@ -39,9 +49,23 @@ plt.ylabel('Exam grade 2')
 plt.title('Training data')
 plt.show()
 
-# 2. Plot 
+# 2. Plot the sigmoid function
 x_values = np.linspace(-10, 10)
 plt.plot(x_values, sigmoid(x_values))
 plt.title('Sigmoid Function')
 plt.grid(True)
 plt.show()
+'''
+# 3. Plot the loss curve in the course of gradient descent using the mean square error
+
+
+# 4. Plot the loss curve in the course of gradient descent using the cross-entropy error
+
+# 5. Plot the decision boundary using the mean square error
+
+# 6. Plot the decision boundary using the cross-entropy error
+
+# 7. Plot the decision boundary using the Scikit-learn logistic regression algorithm
+
+# 8. Plot the probability map using the mean square error
+
