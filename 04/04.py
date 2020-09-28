@@ -18,17 +18,23 @@ def f_pred(X, w):
 X = data[(data[:,2]==1)]
 X2 = data[data[:,2]==0]
 
-label = data[:,2]
+label = data[:,2].reshape([n,1])
 X = np.insert(data,0,1,axis=1)[:,:3]
 print(X.shape)
-w = np.array([[0.1,0.2,0.3]])
+w = np.array([[0,0,0]])
 
 print(f_pred(X, w).shape)
 
+# 4. Define the classification loss function
+def mse_loss(label, h_arr):
+    return np.average(np.square(h_arr - label))
 
+def ce_loss(label, h_arr):
+    return np.average(-label*np.log(h_arr + np.exp(-64)) - (1-label)*np.log(1-h_arr + np.exp(-64)))
 
-
-
+y_pred= f_pred(X, w)
+print(mse_loss(label, y_pred))
+print(ce_loss(label, y_pred))
 
 
 
