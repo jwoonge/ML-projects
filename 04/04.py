@@ -55,8 +55,8 @@ def grad_desc_ce(X, y, w_init, tau, max_iter):
 
 label = data[:,2].reshape([n,1])
 X = np.insert(data,0,1,axis=1)[:,:3]
-w_init = np.array([[0],[0],[0]])
-w_mse, loss_mse = grad_desc_mse(X, label, w_init, 0.002, 100000)
+w_init = np.array([[-9.999],[0.15],[-0.175]])
+w_mse, loss_mse = grad_desc_mse(X, label, w_init, 0.002, 50000)
 w_ce, loss_ce = grad_desc_ce(X, label, w_init, 1e-4, 5000)
 
 # 7. Scikit-learn logistic regession
@@ -113,7 +113,7 @@ def probability_map(w, title):
 ###############
 
 # 1. Plot the dataset in 2D cartessian coordinate system
-'''
+
 idx_admit = (data[:,2]==1)
 idx_rejec = (data[:,2]==0)
 plt.scatter(data[idx_admit,0],data[idx_admit,1], marker='+',c='r')
@@ -130,7 +130,7 @@ plt.plot(x_values, sigmoid(x_values))
 plt.title('Sigmoid Function')
 plt.grid(True)
 plt.show()
-'''
+
 # 3. Plot the loss curve in the course of gradient descent using the mean square error
 plt.plot(loss_mse)
 plt.title('loss curve using mean square error')
@@ -140,7 +140,7 @@ plt.show()
 plt.plot(loss_ce)
 plt.title('loss curve using cross-entropy error')
 plt.show()
-'''
+
 # 5. Plot the decision boundary using the mean square error
 decision_boundary(X, w_mse, 'decision boundary using mean square error')
 
@@ -155,4 +155,3 @@ probability_map(w_mse, 'probability map using mean square error')
 
 # 9. Plot the probability map using the cross-entropy error
 probability_map(w_ce, 'probability map using cross-entropy error')
-'''
