@@ -2,10 +2,13 @@ import numpy as np
 import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import axes3d
 
+# 1. Load dataset
 data = np.loadtxt('dataset-a.txt', delimiter=',')
 n = data.shape[0]
 
-print(n)
+# 2. Define a logistic regression loss function and its gradient
+def segmoid(z):
+    return 1/(1+np.exp(-z))
 
 
 
