@@ -42,6 +42,7 @@ def grad_desc_mse(X, y, w_init, tau, max_iter):
         loss.append(mse_loss(y, y_pred))
     return w, loss
 
+
 def grad_desc_ce(X, y, w_init, tau, max_iter):
     w = copy.deepcopy(w_init)
     y_pred = f_pred(X, w)
