@@ -65,3 +65,7 @@ plt.scatter(data[idx_class1,0], data[idx_class1,1], s=5, c='b')
 plt.legend(['class=0','class=1'])
 plt.title('Training data')
 plt.show()
+
+# 02 Plot the loss curve obtained by the gradient descent
+plt.plot(loss_train)
+plt.show()
