@@ -67,7 +67,8 @@ plt.legend(['class=0','class=1'])
 plt.title('Training data')
 plt.show()
 # 02 Plot the loss curve obtained by the gradient descent
-
+plt.plot(loss_train)
+plt.show()
 # 03 Plot the decision boundary of the obtained classifier
 
 # 04 Plot the probability map of the obtained classifier
