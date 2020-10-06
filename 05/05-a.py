@@ -34,6 +34,10 @@ def ce_loss(y, y_pred):
 def grad_ce_loss(X, y, y_pred):
     return 2/n * np.dot(X.T, (y_pred - y))
 
+def accuracy(y, y_pred):
+    correct = y_pred[np.abs(y-y_pred)<=0.5]
+    return correct.shape[0] / y.shape[0] * 100
+
 ###### RESULTS ######
 # 01 Visualize the data
 idx_class0 = (data[:,2]==0)
