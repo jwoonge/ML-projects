@@ -25,6 +25,9 @@ def f(xs, degree):
         ret *= (xs[:,i]**degree[i])
     return ret
 
+def f_pred(X, w):
+    return sigmoid(np.matmul(X,w))
+
 ###### RESULTS ######
 # 01 Visualize the data
 idx_class0 = (data[:,2]==0)
