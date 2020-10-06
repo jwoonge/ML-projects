@@ -25,6 +25,9 @@ def sigmoid(z):
 def f_pred(X, w):
     return sigmoid(np.matmul(X,w))
 
+def ce_loss(y, y_pred):
+    return -1*np.average(y*np.log(y_pred + np.exp(-64)) + (1-y)*np.log(1-y_pred + np.exp(-64)))
+
 ###### RESULTS ######
 # 01 Visualize the data
 idx_class0 = (data[:,2]==0)
