@@ -5,16 +5,14 @@ from mpl_toolkits.mplot3d import axes3d
 # 1. Load dataset
 data = np.loadtxt('dataset-a.txt', delimiter=',')
 global n; n = data.shape[0]
-global degrees; degrees = np.array([[0,0],[1,0],[0,1],[2,0],[0,2]])
-global nd; nd = degrees.shape[0]
 global nx; nx = data.shape[1]-1
 
 # 2. Define a logistic regression loss function and its gradient
 def sigmoid(z):
     return 1/(1+np.exp(-z))
 
-def vectorize(xs):
-    X = np.ones([xs.shape[0], nd])
+def vectorize(xs, degrees):
+    X = np.ones([xs.shape[0], degrees.shape[0]])
     for i in range(nd):
         X[:,i] = f(xs, degrees[i])
     return X
@@ -53,17 +51,19 @@ def grad_desc(X, y, w_init, tau, max_iter):
     return w, loss, accuracy_train
 
 label = data[:,-1].reshape((n,1))
+degrees = np.array([[0,0],[1,0],[0,1],[2,0],[0,2],[2,1],[1,2],[2,2],[1,3],[3,1]])
+nd = degrees.shape[0]
 w_init = np.ones((nd,1))
-X = vectorize(data)
+X = vectorize(data, degrees)
 tau = 0.01; max_iter=10000
 w, loss_train, accuracy_train = grad_desc(X, label, w_init, tau, max_iter)
 
-def decision_boundary(w, minx, maxx, miny, maxy):
+def decision_boundary(w, degrees, minx, maxx, miny, maxy):
     xx1, xx2 = np.meshgrid(np.linspace(minx, maxx), np.linspace(miny, maxy)) # create meshgrid
     X2 = np.ones([np.prod(xx1.shape),2]) 
     X2[:,0] = xx1.reshape(-1)
     X2[:,1] = xx2.reshape(-1)
-    p = f_pred(vectorize(X2),w)
+    p = f_pred(vectorize(X2, degrees),w)
     p = p.reshape([xx1.shape[0],xx2.shape[0]])
 
     idx_class0 = (data[:,2]==0)
@@ -75,7 +75,7 @@ def decision_boundary(w, minx, maxx, miny, maxy):
     plt.title('Decision Boundary')
     plt.show()
 
-def probability_map(w, minx, maxx, miny, maxy):
+def probability_map(w, degrees, minx, maxx, miny, maxy):
     num_a = 100
     grid_x1 = np.linspace(minx,maxx,num_a); grid_x2 = np.linspace(miny,maxy,num_a)
     score_x1, score_x2 = np.meshgrid(grid_x1, grid_x2)
@@ -83,7 +83,7 @@ def probability_map(w, minx, maxx, miny, maxy):
     for i in range(len(grid_x1)):
         for j in range(len(grid_x2)):
             tmpX = np.array([grid_x1[i], grid_x2[j]]).reshape((1,nx))
-            predict_prob = f_pred(vectorize(tmpX), w)
+            predict_prob = f_pred(vectorize(tmpX, degrees), w)
             Z[j, i] = predict_prob
 
     cf = plt.contourf(score_x1, score_x2, Z, num_a, alpha=0.5, cmap='RdBu')
@@ -112,8 +112,8 @@ plt.show()
 # 03 Plot the decision boundary of the obtained classifier
 minx, maxx = data[:,0].min(), data[:,0].max()
 miny, maxy = data[:,1].min(), data[:,1].max()
-decision_boundary(w, minx, maxx, miny, maxy)
+decision_boundary(w, degrees, minx, maxx, miny, maxy)
 # 04 Plot the probability map of the obtained classifier
-probability_map(w, minx, maxx, miny, maxy)
+probability_map(w, degrees, minx, maxx, miny, maxy)
 # 05 Compute the classification accuracy
 print(round(accuracy_train[-1],2))
