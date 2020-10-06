@@ -28,6 +28,9 @@ def f_pred(X, w):
 def ce_loss(y, y_pred):
     return -1*np.average(y*np.log(y_pred + np.exp(-64)) + (1-y)*np.log(1-y_pred + np.exp(-64)))
 
+def grad_ce_loss(X, y, y_pred):
+    return 2/n * np.dot(X.T, (y_pred - y))
+
 ###### RESULTS ######
 # 01 Visualize the data
 idx_class0 = (data[:,2]==0)
