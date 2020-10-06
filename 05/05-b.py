@@ -7,7 +7,17 @@ data = np.loadtxt('dataset-b.txt', delimiter=',')
 global n; n = data.shape[0]
 global nx; nx = data.shape[1]-1
 
+def vectorize(xs, degrees):
+    X = np.ones([xs.shape[0], degrees.shape[0]])
+    for i in range(nd):
+        X[:,i] = f(xs, degrees[i])
+    return X
 
+def f(xs, degree):
+    ret = np.ones((xs.shape[0]))
+    for i in range(nx):
+        ret *= (xs[:,i]**degree[i])
+    return ret
 
 
 ###### RESULTS ######
