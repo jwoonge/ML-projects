@@ -49,11 +49,12 @@ def grad_desc(X, y, w_init, tau, max_iter):
     return w, loss, accuracy_train
 
 label = data[:,-1].reshape((n,1))
-degrees = np.array([[0,0],[1,0],[0,1],[2,0],[0,2],[2,1],[1,2],[2,2],[1,3],[3,1]])
+degrees = np.array([[0,0],[0,1],[1,0],[2,0],[0,2],[3,0],[0,3],[1,1],[5,1],[3,3]])
+
 nd = degrees.shape[0]
 w_init = np.ones((nd,1))
 X = vectorize(data, degrees)
-tau = 0.01; max_iter=10000
+tau = 0.03; max_iter=50000
 w, loss_train, accuracy_train = grad_desc(X, label, w_init, tau, max_iter)
 
 def decision_boundary(w, degrees, minx, maxx, miny, maxy):
