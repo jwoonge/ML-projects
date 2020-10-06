@@ -35,6 +35,27 @@ def accuracy(y, y_pred):
     correct = y_pred[np.abs(y-y_pred)<=0.5]
     return correct.shape[0] / y.shape[0] * 100
 
+def grad_desc(X, y, w_init, tau, max_iter):
+    w = w_init
+    y_pred = f_pred(X, w)
+    loss = [ce_loss(y, y_pred)]
+    accuracy_train = [accuracy(y, y_pred)]
+    for i in range(max_iter):
+        grad = grad_ce_loss(X, y, y_pred)
+        w = w - tau*grad
+        y_pred = f_pred(X, w)
+        loss.append(ce_loss(y, y_pred))
+        accuracy_train.append(accuracy(y, y_pred))
+    return w, loss, accuracy_train
+
+label = data[:,-1].reshape((n,1))
+degrees = np.array([[0,0],[1,0],[0,1],[2,0],[0,2],[2,1],[1,2],[2,2],[1,3],[3,1]])
+nd = degrees.shape[0]
+w_init = np.ones((nd,1))
+X = vectorize(data, degrees)
+tau = 0.01; max_iter=10000
+w, loss_train, accuracy_train = grad_desc(X, label, w_init, tau, max_iter)
+
 ###### RESULTS ######
 # 01 Visualize the data
 idx_class0 = (data[:,2]==0)
