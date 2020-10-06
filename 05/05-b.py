@@ -9,7 +9,7 @@ global nx; nx = data.shape[1]-1
 
 def vectorize(xs, degrees):
     X = np.ones([xs.shape[0], degrees.shape[0]])
-    for i in range(nd):
+    for i in range(degrees.shape[0]):
         X[:,i] = f(xs, degrees[i])
     return X
 
@@ -18,6 +18,9 @@ def f(xs, degree):
     for i in range(nx):
         ret *= (xs[:,i]**degree[i])
     return ret
+
+def sigmoid(z):
+    return 1/(1+np.exp(-z))
 
 
 ###### RESULTS ######
