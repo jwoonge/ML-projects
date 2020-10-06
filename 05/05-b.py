@@ -22,6 +22,8 @@ def f(xs, degree):
 def sigmoid(z):
     return 1/(1+np.exp(-z))
 
+def f_pred(X, w):
+    return sigmoid(np.matmul(X,w))
 
 ###### RESULTS ######
 # 01 Visualize the data
