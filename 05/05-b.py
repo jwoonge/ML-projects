@@ -56,6 +56,23 @@ X = vectorize(data, degrees)
 tau = 0.01; max_iter=10000
 w, loss_train, accuracy_train = grad_desc(X, label, w_init, tau, max_iter)
 
+def decision_boundary(w, minx, maxx, miny, maxy):
+    xx1, xx2 = np.meshgrid(np.linspace(minx, maxx), np.linspace(miny, maxy)) # create meshgrid
+    X2 = np.ones([np.prod(xx1.shape),2]) 
+    X2[:,0] = xx1.reshape(-1)
+    X2[:,1] = xx2.reshape(-1)
+    p = f_pred(calX(X2),w)
+    p = p.reshape([xx1.shape[0],xx2.shape[0]])
+
+    idx_class0 = (data[:,2]==0)
+    idx_class1 = (data[:,2]==1)
+    plt.scatter(data[idx_class0,0], data[idx_class0,1], s=5, c='r', label='class=0')
+    plt.scatter(data[idx_class1,0], data[idx_class1,1], s=5, c='b', label='class=1')
+    plt.contour(xx1, xx2, p, levels=[0,0.5,1])
+    plt.legend()
+    plt.title('Decision Boundary')
+    plt.show()
+
 ###### RESULTS ######
 # 01 Visualize the data
 idx_class0 = (data[:,2]==0)
