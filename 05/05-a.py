@@ -75,6 +75,28 @@ def decision_boundary(w, minx, maxx, miny, maxy):
     plt.title('Decision Boundary')
     plt.show()
 
+def probability_map(w, minx, maxx, miny, maxy):
+    num_a = 100
+    grid_x1 = np.linspace(minx,maxx,num_a); grid_x2 = np.linspace(miny,maxy,num_a)
+    score_x1, score_x2 = np.meshgrid(grid_x1, grid_x2)
+    Z = np.zeros((len(grid_x1), len(grid_x2)))
+    for i in range(len(grid_x1)):
+        for j in range(len(grid_x2)):
+            tmpX = np.array([grid_x1[i], grid_x2[j]]).reshape((1,nx))
+            predict_prob = f_pred(vectorize(tmpX), w)
+            Z[j, i] = predict_prob
+
+    cf = plt.contourf(score_x1, score_x2, Z, num_a, alpha=0.5, cmap='RdBu')
+    cbar = plt.colorbar(cf)
+    cbar.update_ticks()
+    idx_class0 = (data[:,2]==0)
+    idx_class1 = (data[:,2]==1)
+    plt.scatter(data[idx_class0,0], data[idx_class0,1], s=5, c='r', label='class=0')
+    plt.scatter(data[idx_class1,0], data[idx_class1,1], s=5, c='b', label='class=1')
+    plt.legend()
+    plt.title('Probability Map')
+    plt.show()
+
 ###### RESULTS ######
 # 01 Visualize the data
 idx_class0 = (data[:,2]==0)
@@ -92,5 +114,6 @@ minx, maxx = data[:,0].min(), data[:,0].max()
 miny, maxy = data[:,1].min(), data[:,1].max()
 decision_boundary(w, minx, maxx, miny, maxy)
 # 04 Plot the probability map of the obtained classifier
-
+probability_map(w, minx, maxx, miny, maxy)
 # 05 Compute the classification accuracy
+print(round(accuracy_train[-1],2))
