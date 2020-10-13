@@ -29,6 +29,10 @@ def ce_loss(y, y_pred, w, lam):
 def grad_ce_loss(X, y, y_pred):
     return 2/X.shape[0] * np.dot(X.T, (y_pred-y))
 
+def accuracy(y, y_pred):
+    correct = y_pred[np.abs(y-y_pred)<=0.5]
+    return correct.shape[0] / y.shape[0] * 100
+
 
 degrees = np.array([[x,y] for x in range(10) for y in range(10)])
 label_train = data_train[:,-1].reshape((data_train.shape[0],1))
