@@ -59,14 +59,11 @@ def grad_desc(data_train, data_test, degrees, w_init, tau, lam, max_iter):
 
 degrees = np.array([[x,y] for x in range(10) for y in range(10)])
 w_init = np.random.randn(100).reshape((100,1))
-w, loss_train, loss_test, acc_train, acc_test = grad_desc(data_train, data_test, degrees, w_init, 0.01, 0.1, 5000)
-plt.plot(loss_train, c='r')
-plt.plot(loss_test, c='b')
-plt.show()
-plt.plot(acc_train, c='r')
-plt.plot(acc_test, c='b')
-plt.show()
-
+w_e1, loss_train_e1, loss_test_e1, acc_train_e1, acc_test_e1 = grad_desc(data_train, data_test, degrees, w_init, 0.01, 0.1, 5000)
+w_e2, loss_train_e2, loss_test_e2, acc_train_e2, acc_test_e2 = grad_desc(data_train, data_test, degrees, w_init, 0.01, 0.01, 5000)
+w_e3, loss_train_e3, loss_test_e3, acc_train_e3, acc_test_e3 = grad_desc(data_train, data_test, degrees, w_init, 0.01, 0.001, 5000)
+w_e4, loss_train_e4, loss_test_e4, acc_train_e4, acc_test_e4 = grad_desc(data_train, data_test, degrees, w_init, 0.01, 0.0001, 5000)
+w_e5, loss_train_e5, loss_test_e5, acc_train_e5, acc_test_e5 = grad_desc(data_train, data_test, degrees, w_init, 0.01, 0.00001, 5000)
 
 
 def plot_data(data, title, xmin=-2,xmax=3,ymin=-1,ymax=1.2):
