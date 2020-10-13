@@ -20,6 +20,11 @@ def f(xs, degree):
         ret *= xs[:,i]**degree[i]
     return ret
 
+def f_pred(X, w):
+    return sigmoid(np.matmul(X, w))
+
+
+
 
 def plot_data(data, title, xmin=-2,xmax=3,ymin=-1,ymax=1.2):
     plt.scatter(data[data[:,2]==0,0],data[data[:,2]==0,1], c='r', s=5)
