@@ -8,6 +8,17 @@ data_test = np.loadtxt('testing.txt', delimiter=',')
 def sigmoid(z):
     return 1/(1+np.exp(-z))
 
+def vectorize(xs, degrees):
+    X = np.ones([xs.shape[0], degrees.shape[0]])
+    for i in range(degrees.shape[0]):
+        X[:,i] = f(xs, degrees[i])
+    return X
+
+def f(xs, degree):
+    ret = np.ones((xs.shape[0]))
+    for i in range(xs.shape[1]):
+        ret *= xs[:,i]**degree[i]
+    return ret
 
 
 def plot_data(data, title, xmin=-2,xmax=3,ymin=-1,ymax=1.2):
