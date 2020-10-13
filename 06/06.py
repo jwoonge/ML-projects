@@ -6,7 +6,7 @@ data_train = np.loadtxt('training.txt', delimiter=',')
 data_test = np.loadtxt('testing.txt', delimiter=',')
 
 def sigmoid(z):
-    return 1/(1+np.exp(-z))
+    return 1/(1+np.exp(-z + np.exp(-64)))
 
 def vectorize(xs, degrees):
     X = np.ones([xs.shape[0], degrees.shape[0]])
@@ -23,6 +23,17 @@ def f(xs, degree):
 def f_pred(X, w):
     return sigmoid(np.matmul(X, w))
 
+def ce_loss(y, y_pred, w, lam):
+    return -1*np.average(y*np.log(y_pred + np.exp(-64)) + (1-y)*np.log(1-y_pred + np.exp(-64))) + lam/2*np.average(w)
+
+
+
+degrees = np.array([[x,y] for x in range(10) for y in range(10)])
+label_train = data_train[:,-1].reshape((data_train.shape[0],1))
+w_init = np.random.randn(100).reshape((100,1))
+X = vectorize(data_train[:,:2], degrees)
+y_pred = f_pred(X, w_init)
+print(ce_loss(label_train, y_pred, w_init, 0.01))
 
 
 
@@ -35,6 +46,7 @@ def plot_data(data, title, xmin=-2,xmax=3,ymin=-1,ymax=1.2):
     plt.xlabel('x')
     plt.ylabel('y')
     plt.title(title)
+'''
 ###### OUTPUT ######
 # 1. Plot the training data
 plot_data(data_train, 'training data')
@@ -42,3 +54,4 @@ plt.show()
 # 2. Plot the testing data
 plot_data(data_test, 'testing data')
 plt.show()
+'''
