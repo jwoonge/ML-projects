@@ -26,6 +26,8 @@ def f_pred(X, w):
 def ce_loss(y, y_pred, w, lam):
     return -1*np.average(y*np.log(y_pred + np.exp(-64)) + (1-y)*np.log(1-y_pred + np.exp(-64))) + lam/2*np.average(w)
 
+def grad_ce_loss(X, y, y_pred):
+    return 2/X.shape[0] * np.dot(X.T, (y_pred-y))
 
 
 degrees = np.array([[x,y] for x in range(10) for y in range(10)])
