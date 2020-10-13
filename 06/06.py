@@ -5,6 +5,8 @@ from mpl_toolkits.mplot3d import axes3d
 data_train = np.loadtxt('training.txt', delimiter=',')
 data_test = np.loadtxt('testing.txt', delimiter=',')
 
+def sigmoid(z):
+    return 1/(1+np.exp(-z))
 
 
 
