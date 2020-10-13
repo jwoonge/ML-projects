@@ -60,11 +60,11 @@ def grad_desc(data_train, data_test, degrees, w_init, tau, lam, max_iter):
 degrees = np.array([[x,y] for x in range(10) for y in range(10)])
 #w_init = np.random.randn(100).reshape((100,1))
 w_init = np.ones((100,1))
-w_e1, loss_train_e1, loss_test_e1, acc_train_e1, acc_test_e1 = grad_desc(data_train, data_test, degrees, w_init, 0.02, 0.1, 3000)
-w_e2, loss_train_e2, loss_test_e2, acc_train_e2, acc_test_e2 = grad_desc(data_train, data_test, degrees, w_init, 0.02, 0.01, 10000)
-w_e3, loss_train_e3, loss_test_e3, acc_train_e3, acc_test_e3 = grad_desc(data_train, data_test, degrees, w_init, 0.02, 0.001, 10000)
-w_e4, loss_train_e4, loss_test_e4, acc_train_e4, acc_test_e4 = grad_desc(data_train, data_test, degrees, w_init, 0.02, 0.0001, 10000)
-w_e5, loss_train_e5, loss_test_e5, acc_train_e5, acc_test_e5 = grad_desc(data_train, data_test, degrees, w_init, 0.02, 0.00001, 10000)
+w_e1, loss_train_e1, loss_test_e1, acc_train_e1, acc_test_e1 = grad_desc(data_train, data_test, degrees, w_init, 0.02, 0.1, 5000)
+w_e2, loss_train_e2, loss_test_e2, acc_train_e2, acc_test_e2 = grad_desc(data_train, data_test, degrees, w_init, 0.02, 0.01, 20000)
+w_e3, loss_train_e3, loss_test_e3, acc_train_e3, acc_test_e3 = grad_desc(data_train, data_test, degrees, w_init, 0.1, 0.001, 30000)
+w_e4, loss_train_e4, loss_test_e4, acc_train_e4, acc_test_e4 = grad_desc(data_train, data_test, degrees, w_init, 0.1, 0.0001, 30000)
+w_e5, loss_train_e5, loss_test_e5, acc_train_e5, acc_test_e5 = grad_desc(data_train, data_test, degrees, w_init, 0.1, 0.00001, 30000)
 
 
 def plot_data(data, title='data', xmin=-2,xmax=3,ymin=-1,ymax=1.2):
@@ -121,7 +121,7 @@ def probability_map(data_train, data_test, w, degrees, title="",xmin=-2, xmax=3,
     plt.show()
     
 ###### OUTPUT ######
-'''
+
 # 1. Plot the training data
 plot_data(data_train, 'training data')
 plt.show()
@@ -144,17 +144,15 @@ plt.show()
 plot_loss_curve(loss_train_e1, loss_test_e1, title='lambda = 1e-01')
 plt.show()
 # 8. Plot the probability map of obtained classifier with lambda = 0.00001
-'''
 probability_map(data_train, data_test, w_e5, degrees, title='lambda = 1e-05')
-
-probability_map(data_train, data_test, w_e1, degrees, title='lambda = 1e-01')
-
-
 # 9. Plot the probability map of obtained classifier with lambda = 0.0001
+probability_map(data_train, data_test, w_e4, degrees, title='lambda = 1e-04')
 # 10. Plot the probability map of obtained classifier with lambda = 0.001
+probability_map(data_train, data_test, w_e3, degrees, title='lambda = 1e-03')
 # 11. Plot the probability map of obtained classifier with lambda = 0.01
+probability_map(data_train, data_test, w_e2, degrees, title='lambda = 1e-02')
 # 12. Plot the probability map of obtained classifier with lambda = 0.1
-
+probability_map(data_train, data_test, w_e1, degrees, title='lambda = 1e-01')
 # 13. Plot the final training accuracy with the given regularization parameters
 print('lambda\t Training Accuracy (%)')
 print('0.00001\t',acc_train_e5[-1])
