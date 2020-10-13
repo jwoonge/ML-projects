@@ -58,17 +58,18 @@ def grad_desc(data_train, data_test, degrees, w_init, tau, lam, max_iter):
     return w, loss_train, loss_test, acc_train, acc_test
 
 degrees = np.array([[x,y] for x in range(10) for y in range(10)])
-w_init = np.random.randn(100).reshape((100,1))
-w_e1, loss_train_e1, loss_test_e1, acc_train_e1, acc_test_e1 = grad_desc(data_train, data_test, degrees, w_init, 0.01, 0.1, 5000)
-w_e2, loss_train_e2, loss_test_e2, acc_train_e2, acc_test_e2 = grad_desc(data_train, data_test, degrees, w_init, 0.01, 0.01, 5000)
-w_e3, loss_train_e3, loss_test_e3, acc_train_e3, acc_test_e3 = grad_desc(data_train, data_test, degrees, w_init, 0.01, 0.001, 5000)
-w_e4, loss_train_e4, loss_test_e4, acc_train_e4, acc_test_e4 = grad_desc(data_train, data_test, degrees, w_init, 0.01, 0.0001, 5000)
-w_e5, loss_train_e5, loss_test_e5, acc_train_e5, acc_test_e5 = grad_desc(data_train, data_test, degrees, w_init, 0.01, 0.00001, 5000)
+#w_init = np.random.randn(100).reshape((100,1))
+w_init = np.ones((100,1))
+w_e1, loss_train_e1, loss_test_e1, acc_train_e1, acc_test_e1 = grad_desc(data_train, data_test, degrees, w_init, 0.02, 0.1, 3000)
+w_e2, loss_train_e2, loss_test_e2, acc_train_e2, acc_test_e2 = grad_desc(data_train, data_test, degrees, w_init, 0.02, 0.01, 10000)
+w_e3, loss_train_e3, loss_test_e3, acc_train_e3, acc_test_e3 = grad_desc(data_train, data_test, degrees, w_init, 0.02, 0.001, 10000)
+w_e4, loss_train_e4, loss_test_e4, acc_train_e4, acc_test_e4 = grad_desc(data_train, data_test, degrees, w_init, 0.02, 0.0001, 10000)
+w_e5, loss_train_e5, loss_test_e5, acc_train_e5, acc_test_e5 = grad_desc(data_train, data_test, degrees, w_init, 0.02, 0.00001, 10000)
 
 
-def plot_data(data, title, xmin=-2,xmax=3,ymin=-1,ymax=1.2):
-    plt.scatter(data[data[:,2]==0,0],data[data[:,2]==0,1], c='r', s=5)
-    plt.scatter(data[data[:,2]==1,0],data[data[:,2]==1,1], c='b', s=5)
+def plot_data(data, title='data', xmin=-2,xmax=3,ymin=-1,ymax=1.2):
+    plt.scatter(data[data[:,2]==0,0],data[data[:,2]==0,1], c='r', s=5, label='label=0')
+    plt.scatter(data[data[:,2]==1,0],data[data[:,2]==1,1], c='b', s=5, label='label=1')
     plt.xlim(xmin, xmax)
     plt.ylim(ymin, ymax)
     plt.legend(['label=0','label=1'])
@@ -84,8 +85,43 @@ def plot_loss_curve(loss_train, loss_test, title):
     plt.title(title)
     plt.legend(['training','testing'])
 
+def probability_map(data_train, data_test, w, degrees, title="",xmin=-2, xmax=3, ymin=-1, ymax=1.2):
+    num_a = 100
+    grid_x1 = np.linspace(xmin, xmax, num_a); grid_x2 = np.linspace(ymin, ymax, num_a)
+    mesh_x1, mesh_x2 = np.meshgrid(grid_x1, grid_x2)
+    X2 = np.ones([np.prod(mesh_x1.shape),2])
+    X2[:,0] = mesh_x1.reshape(-1)
+    X2[:,1] = mesh_x2.reshape(-1)
+    p = f_pred(vectorize(X2, degrees),w).reshape([mesh_x1.shape[0], mesh_x2.shape[0]])
 
+    fig = plt.figure(figsize=(14,7))
+    ax = fig.add_subplot(121)
+    cf = ax.contourf(mesh_x1, mesh_x2, p, 100, vmin=0, vmax=1, cmap='coolwarm', alpha=0.6)
+    ax.contour(mesh_x1, mesh_x2, p, levels=[0.5])
+    cbar = fig.colorbar(cf)
+    cbar.update_ticks()
+    ax.scatter(data_train[data_train[:,2]==0,0], data_train[data_train[:,2]==0,1], c='r', s=5, label='label=0')
+    ax.scatter(data_train[data_train[:,2]==1,0], data_train[data_train[:,2]==1,1], c='b', s=5, label='label=1')
+    ax.set_xlim(xmin, xmax)
+    ax.set_ylim(ymin, ymax)
+    plt.title(title+', training')
+
+    ax2 = fig.add_subplot(122)
+    cf2 = ax2.contourf(mesh_x1, mesh_x2, p, 100, vmin=0, vmax=1, cmap='coolwarm', alpha=0.6)
+    ax2.contour(mesh_x1, mesh_x2, p, levels=[0.5])
+    cbar = fig.colorbar(cf2)
+    cbar.update_ticks()
+    ax2.scatter(data_test[data_test[:,2]==0,0], data_test[data_test[:,2]==0,1], c='r', s=5, label='label=0')
+    ax2.scatter(data_test[data_test[:,2]==1,0], data_test[data_test[:,2]==1,1], c='b', s=5, label='label=1')
+    ax2.set_xlim(xmin, xmax)
+    ax2.set_ylim(ymin, ymax)
+
+    plt.legend()
+    plt.title(title+', testing')
+    plt.show()
+    
 ###### OUTPUT ######
+'''
 # 1. Plot the training data
 plot_data(data_train, 'training data')
 plt.show()
@@ -108,6 +144,12 @@ plt.show()
 plot_loss_curve(loss_train_e1, loss_test_e1, title='lambda = 1e-01')
 plt.show()
 # 8. Plot the probability map of obtained classifier with lambda = 0.00001
+'''
+probability_map(data_train, data_test, w_e5, degrees, title='lambda = 1e-05')
+
+probability_map(data_train, data_test, w_e1, degrees, title='lambda = 1e-01')
+
+
 # 9. Plot the probability map of obtained classifier with lambda = 0.0001
 # 10. Plot the probability map of obtained classifier with lambda = 0.001
 # 11. Plot the probability map of obtained classifier with lambda = 0.01
