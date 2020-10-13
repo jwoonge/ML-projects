@@ -75,7 +75,16 @@ def plot_data(data, title, xmin=-2,xmax=3,ymin=-1,ymax=1.2):
     plt.xlabel('x')
     plt.ylabel('y')
     plt.title(title)
-'''
+
+def plot_loss_curve(loss_train, loss_test, title):
+    plt.plot(loss_train, c='b')
+    plt.plot(loss_test, c='r')
+    plt.xlabel('iteration')
+    plt.ylabel('loss value')
+    plt.title(title)
+    plt.legend(['training','testing'])
+
+
 ###### OUTPUT ######
 # 1. Plot the training data
 plot_data(data_train, 'training data')
@@ -83,4 +92,38 @@ plt.show()
 # 2. Plot the testing data
 plot_data(data_test, 'testing data')
 plt.show()
-'''
+# 3. Plot the learning curve with lambda = 0.00001
+plot_loss_curve(loss_train_e5, loss_test_e5, title='lambda = 1e-05')
+plt.show()
+# 4. Plot the learning curve with lambda = 0.0001
+plot_loss_curve(loss_train_e4, loss_test_e4, title='lambda = 1e-04')
+plt.show()
+# 5. Plot the learning curve with lambda = 0.001
+plot_loss_curve(loss_train_e3, loss_test_e3, title='lambda = 1e-03')
+plt.show()
+# 6. Plot the learning curve with lambda = 0.01
+plot_loss_curve(loss_train_e2, loss_test_e2, title='lambda = 1e-02')
+plt.show()
+# 7. Plot the learning curve with lamdba = 0.1
+plot_loss_curve(loss_train_e1, loss_test_e1, title='lambda = 1e-01')
+plt.show()
+# 8. Plot the probability map of obtained classifier with lambda = 0.00001
+# 9. Plot the probability map of obtained classifier with lambda = 0.0001
+# 10. Plot the probability map of obtained classifier with lambda = 0.001
+# 11. Plot the probability map of obtained classifier with lambda = 0.01
+# 12. Plot the probability map of obtained classifier with lambda = 0.1
+
+# 13. Plot the final training accuracy with the given regularization parameters
+print('lambda\t Training Accuracy (%)')
+print('0.00001\t',acc_train_e5[-1])
+print('0.0001\t',acc_train_e4[-1])
+print('0.001\t',acc_train_e3[-1])
+print('0.01\t',acc_train_e2[-1])
+print('0.1\t',acc_train_e1[-1])
+# 14. Plot the final testing accuracy with the given regularization parameters
+print('lambda\t TestingAccuracy (%)')
+print('0.00001\t',acc_test_e5[-1])
+print('0.0001\t',acc_test_e4[-1])
+print('0.001\t',acc_test_e3[-1])
+print('0.01\t',acc_test_e2[-1])
+print('0.1\t',acc_test_e1[-1])
