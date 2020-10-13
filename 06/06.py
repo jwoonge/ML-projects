@@ -1,6 +1,7 @@
 import numpy as np
 import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import axes3d
+import copy
 
 data_train = np.loadtxt('training.txt', delimiter=',')
 data_test = np.loadtxt('testing.txt', delimiter=',')
@@ -33,13 +34,38 @@ def accuracy(y, y_pred):
     correct = y_pred[np.abs(y-y_pred)<=0.5]
     return correct.shape[0] / y.shape[0] * 100
 
+def grad_desc(data_train, data_test, degrees, w_init, tau, lam, max_iter):
+    X_train = vectorize(data_train[:,:2], degrees)
+    X_test = vectorize(data_test[:,:2], degrees)
+    label_train = data_train[:,-1].reshape((data_train.shape[0],1))
+    label_test = data_test[:,-1].reshape((data_test.shape[0], 1))
+    w = copy.deepcopy(w_init)
+    y_pred_train = f_pred(X_train, w)
+    y_pred_test = f_pred(X_test, w)
+    loss_train = [ce_loss(label_train, y_pred_train, w, lam)]
+    loss_test = [ce_loss(label_test, y_pred_test, w, lam)]
+    acc_train = [accuracy(label_train, y_pred_train)]
+    acc_test = [accuracy(label_test, y_pred_test)]
+    for i in range(max_iter):
+        grad = grad_ce_loss(X_train, label_train, y_pred_train)
+        w = (1-tau*lam)*w - tau*grad
+        y_pred_train = f_pred(X_train, w)
+        y_pred_test = f_pred(X_test, w)
+        loss_train.append(ce_loss(label_train, y_pred_train, w, lam))
+        loss_test.append(ce_loss(label_test, y_pred_test, w, lam))
+        acc_train.append(accuracy(label_train, y_pred_train))
+        acc_test.append(accuracy(label_test, y_pred_test))
+    return w, loss_train, loss_test, acc_train, acc_test
 
 degrees = np.array([[x,y] for x in range(10) for y in range(10)])
-label_train = data_train[:,-1].reshape((data_train.shape[0],1))
 w_init = np.random.randn(100).reshape((100,1))
-X = vectorize(data_train[:,:2], degrees)
-y_pred = f_pred(X, w_init)
-print(ce_loss(label_train, y_pred, w_init, 0.01))
+w, loss_train, loss_test, acc_train, acc_test = grad_desc(data_train, data_test, degrees, w_init, 0.01, 0.1, 5000)
+plt.plot(loss_train, c='r')
+plt.plot(loss_test, c='b')
+plt.show()
+plt.plot(acc_train, c='r')
+plt.plot(acc_test, c='b')
+plt.show()
 
 
 
