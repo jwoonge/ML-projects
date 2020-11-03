@@ -5,7 +5,10 @@ import pandas as pd
 dataset = pd.read_csv('data-kmeans.csv')
 data = dataset.values
 
+def compute_distance(a, b):
+    return np.sqrt(np.sum(np.square(a-b)))
 
+print(compute_distance(np.array([1,3]), np.array([2,4])))
 
 
 
