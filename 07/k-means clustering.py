@@ -30,21 +30,38 @@ def compute_loss(C, M):
     loss = 0
     for i in range(k):
         cluster = data[C==i]
-        loss += compute_distance(cluster, M[i])
+        dists = compute_distance(cluster, M[i])
+        loss += np.sum(dists)
     return loss/k
-    
 
-z = [[2,2], [3,3.5],[0,0],[1,1]]
+def random_initialize():
+    labels = np.zeros(len(data))
+    for i in range(len(data)):
+        labels[i] = np.random.randint(k)
+    return labels
 
-zz = [2,2]
-M = [[1,1],[2,2],[3,3]]
-z = np.array(z); M = np.array(M); zz = np.array(zz)
-print(z.shape, len(z.shape))
-print(compute_distance(z, M))
+def k_means_clustering():
+    labels = random_initialize()
 
-print(compute_label(z, M))
-print(compute_distance(z, np.array([3,3])))
+    losses = []
+    for it in range(100):
+        # calculate centroids
+        centroids = []
+        for i in range(k):
+            centroids.append(compute_centroid(data[labels==i]))
+        centroids = np.array(centroids)
+        # update labels
+        labels = np.zeros(len(data))
+        for i in range(len(data)):
+            labels[i] = compute_label(data[i,:], centroids)
+        # calculate loss
+        loss = compute_loss(labels, centroids)
+        losses.append(loss)
+    return losses
 
+loss = k_means_clustering()
+plt.plot(loss)
+plt.show()
 
 
 
