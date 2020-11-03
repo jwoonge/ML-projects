@@ -8,8 +8,11 @@ data = dataset.values
 def compute_distance(a, b):
     return np.sqrt(np.sum(np.square(a-b)))
 
-print(compute_distance(np.array([1,3]), np.array([2,4])))
+def compute_centroid(Z):
+    return np.average(Z, axis=0)
 
+a = np.array([[0,1],[1,1],[0,0]])
+print(compute_centroid(a))
 
 
 
