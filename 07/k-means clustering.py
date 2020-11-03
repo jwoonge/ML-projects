@@ -113,6 +113,7 @@ plt.plot(loss)
 plt.title('loss')
 plt.show()
 
+
 # 04 Plot the centroid of each cluster
 color_it = iter(cm.rainbow(np.linspace(0,1,k)))
 for i in range(k):
