@@ -15,6 +15,11 @@ data_norm = normalize_data(data)
 x_norm = data_norm[:,0]
 y_norm = data_norm[:,1]
 
+def compute_covariance(data):
+    return np.matmul(data.T, data)/data.shape[0]
+
+covar = compute_covariance(data)
+print(np.shape(covar))
 
 
 
