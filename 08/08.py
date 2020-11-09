@@ -24,6 +24,8 @@ plt.scatter(x, y, c='r', s=3)
 plt.show()
 
 # 2. Plot the normalized data points
+plt.scatter(x_norm, y_norm, c='r', s=3)
+plt.show()
 
 # 3. Plot the principal axis
 
