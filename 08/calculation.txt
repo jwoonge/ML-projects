@@ -1,0 +1,14 @@
+x, y (X)로부터
+u,v 직선(U)에 내린 수선의 발을 (xp, yp)(P)라 하면
+
+xp, yp = k(u, v)   # u,v벡터 내부에 있어야 함
+-> P = kU
+[x-xp, y-yp] * [u,v].T = [0]  # 내적 0
+-> (X-P) dot (U.T) = 0
+-> (X-kU) * (U.T) = [0]
+-> (X-kU) * (U.T) * (U.i) = 0
+
+(x-ku)*u + (y-kv)*v = 0
+xu - ku2 + yv - kv2 = 0
+k(u2+v2) = xu + yv = np.dot(X, U)
+k = np.dot(X, U) / np.sum(np.square(U))

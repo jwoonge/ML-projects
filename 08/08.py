@@ -3,6 +3,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 data = np.loadtxt('data-pca.txt', delimiter=',')
+#data = np.matmul(data, np.array([[0.85,-0.5],[0.5,0.85]]))
 x = data[:,0]
 y = data[:,1]
 
@@ -15,49 +16,86 @@ data_norm = normalize_data(data)
 x_norm = data_norm[:,0]
 y_norm = data_norm[:,1]
 
-def compute_covariance(data):
+def covariance(data):
     return np.matmul(data.T, data)/data.shape[0]
 
-covar = compute_covariance(data)
+covar = covariance(data_norm)
 
-def compute_principal_direction(covariance):
+def principal_direction(covariance):
     eig_value, eig_vector = np.linalg.eig(covariance)
     print(eig_value, eig_vector)
     tmp = []
     dim = len(eig_value)
     for i in range(dim):
-        tmp.append([eig_value[i], eig_vector[i]])
+        tmp.append([eig_value[i], eig_vector[:,i]])
     tmp.sort(key=lambda x:x[0], reverse=True)
-    eig_value = []; eig_vector = []
+    eig_values = []; eig_vectors = []; axis = []
     for i in range(dim):
-        eig_value.append(tmp[i][0])
-        eig_vector.append(tmp[i][1])
-    return np.array(eig_value), np.array(eig_vector)
+        eig_value = tmp[i][0]
+        eig_vector = tmp[i][1]
+        eig_values.append(eig_value)
+        eig_vectors.append(eig_vector)
+        axis.append(eig_vector*eig_value)
+    return np.array(eig_values), np.array(eig_vectors), np.array(axis)
 
-a, b = compute_principal_direction(covar)
+eig_value, eig_vector, axis = principal_direction(covar)
 
+def projection(point, axis):
+    ks = np.dot(point, axis)/np.sum(np.square(axis))
+    ks = ks.reshape((len(ks),1))
+    return np.matmul(ks, axis.reshape(1,len(axis)))
 
-def compute_projection(point, axis):
-    return None
-def compute_distance(p1, p2):
+projected = projection(data_norm, axis[0,:])
+print(projected.shape)
+
+def distance(p1, p2):
     return np.sqrt(np.sum(np.square(p1-p2)))
 
 
 
 ## Results ##
 # 1. Plot the origintal data points
+plt.figure(figsize=(6,6))
 plt.scatter(x, y, c='r', s=3)
 plt.show()
 
 # 2. Plot the normalized data points
-plt.scatter(x_norm, y_norm, c='r', s=3)
+arange = np.array([-3,3])
+plt.figure(figsize=(6,6))
+plt.scatter(x_norm, y_norm, c='r', s=3) 
+plt.xlim(arange)
+plt.ylim(arange)
 plt.show()
 
 # 3. Plot the principal axis
-
+plt.figure(figsize=(6,6))
+plt.scatter(x_norm, y_norm, c='r', s=3)
+plt.xlim(arange)
+plt.ylim(arange)
+plt.plot([0, axis[0][0]], [0, axis[0][1]], c='b')
+plt.plot([0, axis[1][0]], [0, axis[1][1]], c='g')
+#origin = np.zeros((2,2))
+#plt.quiver(*origin, axis[:,0], axis[:,1], color=['b','g'])
+plt.show()
 # 4. Plot the first principal axis
+slope = axis[0][1]/axis[0][0]
+plt.figure(figsize=(6,6))
+plt.scatter(x_norm, y_norm, c='r', s=3)
+plt.xlim(arange)
+plt.ylim(arange)
+plt.plot(arange,arange*slope, c='b')
+plt.title('first principle axis')
+plt.show()
 
 # 5. Plot the project of the normalized data points onto the fist principal axis
+plt.figure(figsize=(6,6))
+plt.scatter(x_norm, y_norm, c='r', s=3)
+plt.xlim(arange)
+plt.ylim(arange)
+plt.plot(arange, arange*slope, c='b')
+plt.scatter(projected[:,0], projected[:,1], c='g')
+plt.show()
+
 
 # 6. Plot the lines between the normalized data points and their projection points on the fist principal axis
 
