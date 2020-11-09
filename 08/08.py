@@ -6,7 +6,14 @@ data = np.loadtxt('data-pca.txt', delimiter=',')
 x = data[:,0]
 y = data[:,1]
 
+def normalize_data(data):
+    mean = np.average(data, axis=0)
+    stdev = np.std(data, axis=0)
+    return (data-mean)/stdev
 
+data_norm = normalize_data(data)
+x_norm = data_norm[:,0]
+y_norm = data_norm[:,1]
 
 
 
