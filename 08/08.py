@@ -4,6 +4,15 @@ import matplotlib.pyplot as plt
 
 data = np.loadtxt('data-pca.txt', delimiter=',')
 #data = np.matmul(data, np.array([[0.85,-0.5],[0.5,0.85]]))
+######
+'''
+data = []; st = 0.1
+for i in range(50):
+    ran = np.random.rand()
+    data.append([i, st*i+ran])
+data = np.array(data)
+'''
+###
 
 def normalize_data(data):
     mean = np.average(data, axis=0)
@@ -74,8 +83,10 @@ plt.figure(figsize=(6,6))
 plt.scatter(x_norm, y_norm, c='r', s=3)
 plt.xlim(arange)
 plt.ylim(arange)
-plt.plot([0, axis[0][0]], [0, axis[0][1]], c='b')
-plt.plot([0, axis[1][0]], [0, axis[1][1]], c='g')
+#plt.plot([0, axis[0][0]], [0, axis[0][1]], c='b')
+#plt.plot([0, axis[1][0]], [0, axis[1][1]], c='g')
+plt.arrow(0, 0, axis[0][0], axis[0][1], color='b', width=0.02)
+plt.arrow(0, 0, axis[1][0], axis[1][1], color='g', width=0.02)
 plt.title('principal diretions')
 plt.show()
 
@@ -108,8 +119,7 @@ plt.ylim(arange)
 plt.plot(arange, arange*slope1, c='b')
 plt.scatter(projected1[:,0], projected1[:,1], c='g')
 for i in range(len(data_norm)):
-    plt.plot([projected1[i,0], data_norm[i,0]], [projected1[i,1], data_norm[i,1]])
-
+    plt.plot([projected1[i,0], data_norm[i,0]], [projected1[i,1], data_norm[i,1]], c='b', linewidth=0.7, linestyle=':')
 plt.title('distance to the first principal axis')
 plt.show()
 
@@ -138,10 +148,9 @@ plt.figure(figsize=(6,6))
 plt.scatter(x_norm, y_norm, c='r', s=3)
 plt.xlim(arange)
 plt.ylim(arange)
-plt.plot(arange, arange*slope1, c='b')
+plt.plot(arange, arange*slope2, c='b')
 plt.scatter(projected2[:,0], projected2[:,1], c='g')
 for i in range(len(data_norm)):
-    plt.plot([projected2[i,0], data_norm[i,0]], [projected2[i,1], data_norm[i,1]])
-
+    plt.plot([projected2[i,0], data_norm[i,0]], [projected2[i,1], data_norm[i,1]], c='b', linewidth=0.7, linestyle=':')
 plt.title('distance to the second principal axis')
 plt.show()
