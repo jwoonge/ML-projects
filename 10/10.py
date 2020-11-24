@@ -74,3 +74,16 @@ def accuracy(pred, y):
         if y[i]==pred_class:
             correct_cnt += 1
     return 100 * correct_cnt / num_sample
+
+def learn(model, data_train, data_test, criterion, optimizer, batch_size, epoch, device='cuda'):
+    data_train_batch = torch.utils.data.DataLoader(data_train, batch_size, shuffle=True)
+    test_x, test_y = data_test.test_data.view((60000,28*28)), data_test.test_labels
+    test_x, test_y = torch.tensor(test_x, dtype=torch.float, device=device), test_y.to(device)
+    loss_train_s = []; loss_test_s = []; acc_train_s = []; acc_test_s = []
+    for i in range(epoch):
+        loss_test, acc_test = test(model, test_x, test_y, criterion)
+        loss_train, acc_train = train(model, data_train, data_train_batch, optimizer, criterion, device)
+        loss_train_s.append(loss_train); loss_test_s.append(loss_test)
+        acc_train_s.append(acc_train); acc_test_s.append(acc_test)
+        print(i, loss_test, acc_test, loss_train, acc_train)
+    return loss_train_s, loss_test_s, acc_train_s, acc_test_s
