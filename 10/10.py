@@ -65,3 +65,12 @@ def test(model, x, y, criterion):
         loss = criterion(pred, y).item()
         acc = accuracy(pred, y)
     return loss, acc
+
+def accuracy(pred, y):
+    correct_cnt = 0
+    num_sample = len(y)
+    for i in range(num_sample):
+        pred_class = pred[i].argmax()
+        if y[i]==pred_class:
+            correct_cnt += 1
+    return 100 * correct_cnt / num_sample
