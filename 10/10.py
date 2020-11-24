@@ -57,3 +57,11 @@ def train(model, data_train, data_train_batch, optimizer, criterion, device='cud
     avg_loss /= n_batch
     avg_acc /= n_batch
     return avg_loss, avg_acc
+
+def test(model, x, y, criterion):
+    model.eval()
+    with torch.no_grad():
+        pred = model.forward(x)
+        loss = criterion(pred, y).item()
+        acc = accuracy(pred, y)
+    return loss, acc
