@@ -36,3 +36,24 @@ class classification(nn.Module):
         x = self.classifier2(x)
         out = self.classifier3(x)
         return out
+
+def train(model, data_train, data_train_batch, optimizer, criterion, device='cuda'):
+    model.train()
+    n_batch = 0
+    avg_loss = 0
+    avg_acc = 0
+    for batch_idx, (x, y) in enumerate(data_train_batch):
+        x, y = x.to(device), y.to(device)
+        optimizer.zero_grad()
+        pred = model.forward(x)
+        loss = criterion(pred, y)
+        avg_loss += loss.item()
+        avg_acc += accuracy(pred, y)
+        n_batch += 1
+
+        loss.backward()
+        optimizer.step()
+
+    avg_loss /= n_batch
+    avg_acc /= n_batch
+    return avg_loss, avg_acc
